@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Web.Http;
 using Newtonsoft.Json;
+using AlexaSkill.Alexa;
 
 namespace AlexaSkill.Controllers
 {
     public class AlexaController : ApiController
     {
+        public LaunchRequest launcher = new LaunchRequest();
+
         [HttpPost, Route("api/alexa/demo")]
         public dynamic CodeGames(AlexaRequest alexaRequest)
         {
@@ -17,7 +20,7 @@ namespace AlexaSkill.Controllers
             switch (alexaRequest.Request.Type)
             {
                 case "LaunchRequest":
-                    response = LaunchRequestHandler(alexaRequest);
+                    response = launcher.LaunchRequestHandler(alexaRequest);
                     break;
                 case "IntentRequest":
                     response = IntentRequestHandler(alexaRequest);
@@ -30,40 +33,6 @@ namespace AlexaSkill.Controllers
             return response;
         }
 
-        private dynamic LaunchRequestHandler(AlexaRequest request)
-        {
-            //var response = new AlexaResponse("Welcome to Code Games.  What would you like to do today?");
-            //response.Session.MemberId = request.Session.Attributes.MemberId;
-            //response.Response.Card.Title = "Billing";
-            //response.Response.Card.Content = "Billing and Invoicing";
-            //response.Response.Reprompt.OutputSpeech.Text = "Would you like to do action1, action2, or action3?";
-            //response.Response.ShouldEndSession = false;
-
-            //return JsonConvert.SerializeObject(response);
-
-            return new
-            {
-                version = "1.0",
-                sessionAttributes = new { },
-                response = new
-                {
-                    outputSpeech = new
-                    {
-                        type = "PlainText",
-                        text = "Welcome to Code Games.  What would you like to do today?"
-                    },
-                    card = new
-                    {
-                        type = "Simple",
-                        title = "AlexTest",
-                        content = "Welcome"
-                    },
-                    shouldEndSession = false
-                }
-            };
-
-
-        }
 
         private dynamic IntentRequestHandler(AlexaRequest request)
         {
